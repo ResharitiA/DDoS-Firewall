@@ -1,0 +1,118 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #11151d; /* Темный фирменный фон */
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Приподнимаем окно чуть выше (8% от высоты экрана) */
+  padding-bottom: 8vh; 
+  box-sizing: border-box;
+}
+
+.window {
+  background-color: #ece9d8;
+  width: 90%;
+  max-width: 850px;
+  border: 2px solid;
+  border-color: #ffffff #808080 #808080 #ffffff;
+  padding: 3px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+  display: flex;
+  flex-direction: column;
+}
+
+.title-bar {
+  background: linear-gradient(90deg, #0077ff 0%, #5AC4FF 100%);
+  padding: 4px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+  font-family: sans-serif;
+  font-size: 13px;
+}
+
+.btn-close-red {
+  width: 21px;
+  height: 21px;
+  background-color: #e81123;
+  color: white;
+  border: 1px solid #ffffff;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.window-body {
+  padding: 45px;
+  text-align: center;
+  min-height: 450px;
+}
+
+.main-title {
+  color: #11151d;
+  font-size: 32px;
+  margin-bottom: 5px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+
+.subtitle {
+  color: #0077ff;
+  font-weight: bold;
+  margin-top: 0;
+  letter-spacing: 1px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.game-description {
+  background: #f2f7ff; /* Светло-голубой из гайда */
+  border: 2px inset #ffffff;
+  padding: 35px;
+  margin: 35px 0;
+  font-size: 18px;
+  color: #333333;
+  text-align: left;
+  line-height: 1.6;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid #d5d5d5;
+  margin: 20px 0;
+}
+
+.footer-text {
+  font-size: 14px;
+  color: #636363;
+}
+
+.btn-play {
+  padding: 18px 50px;
+  background-color: #0077ff;
+  color: white;
+  border: 2px solid;
+  border-color: #5AC4FF #0044aa #0044aa #5AC4FF;
+  font-weight: bold;
+  font-size: 20px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
+  transition: background 0.2s;
+}
+
+.btn-play:hover {
+  background-color: #0066dd;
+}
