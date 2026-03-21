@@ -1,0 +1,323 @@
+/* --- Сброс стилей --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif; /* Для основного текста не задано, но для бренда лучше Montserrat */
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden; /* Чтобы анимации не создавали полосы прокрутки */
+}
+
+/* --- Переменные (Фирменные цвета и шрифты) --- */
+:root {
+    --primary: #0077ff;
+    --light-bg: #f2f7ff;
+    --white-bg: #ffffff;
+    --dark-bg: #11151d;
+    --text: #333333;
+    --captions: #636363;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+}
+
+/* --- Вспомогательные классы --- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.pixel-art {
+    /* Эффект пикселизации: работает только для изображений */
+    image-rendering: pixelated; 
+    /* В ТЗ маскоты — это 3D рендеры, мы их не можем "отпикселить" стилем,
+       поэтому эффект пикселизации мы создадим через *окружающие элементы*.
+       Но этот класс оставим для элементов, которые *можно* отпикселить (ботов). */
+}
+
+/* --- Классы для цветов фона --- */
+.light-bg { background-color: var(--light-bg); color: var(--text); }
+.dark-bg { background-color: var(--dark-bg); color: var(--white-bg); }
+
+/* --- Текстовые стили --- */
+.title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: var(--font-weight-bold);
+    font-size: 4rem; /* Огромный заголовок для привлечения внимания детей */
+    color: var(--primary);
+    margin-bottom: 20px;
+    line-height: 1.1;
+    letter-spacing: -2px;
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    color: var(--captions);
+    margin-bottom: 50px;
+    font-weight: var(--font-weight-semibold);
+}
+
+.captions-text {
+    color: var(--captions);
+}
+
+/* --- Хедер --- */
+.header {
+    padding: 20px 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.logo-pixel {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: var(--font-weight-bold);
+    font-size: 24px;
+    color: var(--primary);
+    text-transform: uppercase;
+    /* Ретро-пиксельный эффект для текста */
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+}
+
+/* --- Основной блок --- */
+.hero {
+    padding-top: 150px;
+    padding-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.hero-text {
+    margin-bottom: 50px;
+    position: relative;
+    z-index: 2;
+}
+
+/* --- Кнопка (Единственная!) --- */
+.btn {
+    display: inline-block;
+    padding: 20px 60px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: var(--font-weight-bold);
+    font-size: 24px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    /* Блик при наведении, "геймерский" эффект */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: all 0.5s;
+}
+
+.btn:hover::after {
+    left: 100%;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 119, 255, 0.4);
+}
+
+.btn-primary:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 119, 255, 0.6);
+}
+
+/* --- Анимационная сцена (Маскот-стейдж) --- */
+.mascot-stage {
+    width: 100%;
+    max-width: 800px;
+    height: 600px;
+    position: relative;
+    margin-bottom: 100px;
+    z-index: 1;
+}
+
+/* Основа сцены - пол */
+.stage-floor {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    height: 100px;
+    background: radial-gradient(ellipse at center, rgba(0, 119, 255, 0.1) 0%, rgba(242, 247, 255, 0) 70%);
+    border-radius: 50%;
+}
+
+/* Главный маскот (image_1.png) */
+.mascot-hero-container {
+    position: absolute;
+    left: 50%;
+    bottom: 120px;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.mascot-hero {
+    height: 400px;
+    width: auto;
+    /* Т.к. это 3D, пикселирование стилем не сработает.
+       Но мы создадим "пиксельный" контур через drop-shadow. */
+    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1)) drop-shadow(-2px -2px 0px rgba(0,0,0,0.1));
+}
+
+/* Эффект сияния щита */
+.shield-glow {
+    position: absolute;
+    top: 60px; /* Приблизительно где щит на image_1.png */
+    left: -10px; /* Приблизительно где щит на image_1.png */
+    width: 160px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    filter: blur(10px);
+    opacity: 0.8;
+    animation: shield-pulse 1s infinite alternate;
+}
+
+/* Сервер DDoS-Guard (image_4.png) */
+.container-server {
+    position: absolute;
+    right: 50px;
+    bottom: 100px;
+    width: 250px;
+    height: auto;
+    z-index: 5;
+    background-color: var(--white-bg);
+    border: 4px solid var(--primary);
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Ретро-пиксельная тень */
+    box-shadow: 10px 10px 0px rgba(0,0,0,0.1);
+}
+
+.server-image {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Атакующие боты (создаем их полностью из CSS, чтобы были пиксельными) */
+.attackers-container {
+    position: absolute;
+    top: 50px;
+    left: -100px; /* Начинают атаку снаружи сцены */
+    width: 300px;
+    height: 200px;
+    z-index: 15;
+}
+
+.attacker {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    background-color: var(--dark-bg);
+    /* Создадим им "пиксельные" глаза */
+    background-image: linear-gradient(to right, var(--text) 4px, transparent 4px, transparent 28px, var(--text) 28px),
+                      linear-gradient(to bottom, var(--text) 4px, transparent 4px, transparent 28px, var(--text) 28px);
+    background-size: 100% 4px, 4px 100%;
+    border: 4px solid var(--captions);
+    border-radius: 4px;
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+}
+
+/* Разные боты */
+.bot-1 { top: 0; left: 0; animation: bot-attack-1 4s infinite ease-in-out; }
+.bot-2 { top: 60px; left: 40px; animation: bot-attack-2 3.5s infinite 0.5s ease-in-out; }
+.bot-3 { top: 120px; left: 0; animation: bot-attack-3 4.2s infinite 1s ease-in-out; }
+
+/* Пакеты данных (ретро) */
+.data-packets {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 100px;
+    height: 40px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.data-packets::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    background-color: var(--primary);
+    border: 4px solid var(--white-bg);
+    box-shadow: 5px 5px 0 var(--light-bg);
+    animation: data-move 1s infinite linear;
+}
+
+/* --- Футер --- */
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 15px 0;
+    font-size: 12px;
+    background-color: var(--white-bg);
+    border-top: 1px solid rgba(0,0,0,0.1);
+    z-index: 10;
+}
+
+/* --- АНИМАЦИИ --- */
+
+/* Пульсация щита */
+@keyframes shield-pulse {
+    0% { opacity: 0.6; filter: blur(10px); transform: scale(1); }
+    100% { opacity: 0.9; filter: blur(5px); transform: scale(1.05); }
+}
+
+/* Атака ботов 1 */
+@keyframes bot-attack-1 {
+    0%, 100% { transform: translate(0, 0); opacity: 1; }
+    30% { transform: translate(400px, 80px); opacity: 0.8; } /* Удар о щит Фаервола */
+    35% { transform: translate(400px, 80px) rotate(45deg); opacity: 0; } /* Уничтожение */
+    40% { transform: translate(0, 0); opacity: 0; } /* Перезарядка */
+}
+
+/* Атака ботов 2 (более хаотичная) */
+@keyframes bot-attack-2 {
+    0%, 100% { transform: translate(0, 0); opacity: 1; }
+    25% { transform: translate(350px, -50px); opacity: 1; }
+    50% { transform: translate(350px, -50px) scale(0.5); opacity: 0; }
+    55% { transform: translate(0, 0) scale(1); opacity: 0; }
+}
+
+/* Атака ботов 3 */
+@keyframes bot-attack-3 {
+    0%, 100% { transform: translate(0, 0); opacity: 1; }
+    40% { transform: translate(380px, 40px); opacity: 1; }
+    45% { transform: translate(380px, 40px) skewX(20deg); opacity: 0; }
+    50% { transform: translate(0, 0); opacity: 0; }
+}
+
+/* Движение пакетов данных */
+@keyframes data-move {
+    0% { transform: translateX(20px); opacity: 0; }
+    10% { transform: translateX(20px); opacity: 1; }
+    90% { transform: translateX(-80px); opacity: 1; }
+    100% { transform: translateX(-80px); opacity: 0; }
+}
