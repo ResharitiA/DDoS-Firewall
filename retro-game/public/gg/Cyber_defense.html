@@ -667,7 +667,7 @@
             <input type="text" id="lastName" placeholder="Введите вашу фамилию">
         </div>
         <div class="auth-form-group">
-            <label for="phone">Контакт</label>
+            <label for="phone">Номер телефона</label>
             <input type="tel" id="phone" placeholder="+7 (XXX) XXX-XX-XX">
         </div>
         <div class="auth-button-group">
@@ -719,7 +719,7 @@
                 <div class="stat-line"><span class="stat-label">Финальный счет:</span><span class="stat-value" id="finalScore">0</span></div>
             </div>
             <div class="end-game-message" id="endGameMessage"></div>
-            <button class="btn" onclick="location.reload()" style="margin-top:25px;">НОВАЯ ИГРА</button>
+            <<button class="btn" onclick="window.parent.postMessage('closeGame', '*')" style="margin-top:25px;">ВЕРНУТЬСЯ В ПАНЕЛЬ</button>
         </div>
     </div>
 </div>

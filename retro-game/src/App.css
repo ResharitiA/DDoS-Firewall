@@ -1,25 +1,30 @@
+/* Сброс глобальных настроек, которые мешают */
+:root {
+  background-color: #11151d !important; /* Тёмный фон всей страницы */
+}
+
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: #11151d; /* Темный фирменный фон */
-}
-
-#root {
-  width: 100vw;
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Приподнимаем окно чуть выше (8% от высоты экрана) */
-  padding-bottom: 8vh; 
-  box-sizing: border-box;
 }
 
+#root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Стили окна Windows */
 .window {
-  background-color: #ece9d8;
+  background-color: #ece9d8; /* Классический серый */
   width: 90%;
   max-width: 850px;
   border: 2px solid;
@@ -28,6 +33,7 @@ html, body {
   box-shadow: 0 25px 60px rgba(0,0,0,0.7);
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 
 .title-bar {
@@ -52,16 +58,20 @@ html, body {
   border-bottom-color: #808080;
   cursor: pointer;
   font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .window-body {
   padding: 45px;
   text-align: center;
   min-height: 450px;
+  background-color: #ece9d8; /* Явно задаем фон тела */
 }
 
 .main-title {
-  color: #11151d;
+  color: #11151d !important;
   font-size: 32px;
   margin-bottom: 5px;
   font-family: 'Montserrat', sans-serif;
@@ -73,11 +83,10 @@ html, body {
   font-weight: bold;
   margin-top: 0;
   letter-spacing: 1px;
-  font-family: 'Montserrat', sans-serif;
 }
 
 .game-description {
-  background: #f2f7ff; /* Светло-голубой из гайда */
+  background: #f2f7ff;
   border: 2px inset #ffffff;
   padding: 35px;
   margin: 35px 0;
@@ -85,18 +94,12 @@ html, body {
   color: #333333;
   text-align: left;
   line-height: 1.6;
-  font-family: 'Open Sans', sans-serif;
 }
 
 .divider {
   border: 0;
   border-top: 1px solid #d5d5d5;
   margin: 20px 0;
-}
-
-.footer-text {
-  font-size: 14px;
-  color: #636363;
 }
 
 .btn-play {
@@ -109,10 +112,23 @@ html, body {
   font-size: 20px;
   cursor: pointer;
   text-transform: uppercase;
-  font-family: 'Montserrat', sans-serif;
-  transition: background 0.2s;
 }
 
 .btn-play:hover {
   background-color: #0066dd;
+}
+
+/* Стили для игры (если уже добавил логику с iframe) */
+.game-wrapper {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 9999;
+}
+.game-iframe {
+  width: 100%; height: 100%; border: none;
+}
+.exit-button {
+  position: absolute; top: 20px; right: 20px;
+  z-index: 10000; padding: 10px; background: red; color: white;
 }
