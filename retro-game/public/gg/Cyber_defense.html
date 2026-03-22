@@ -671,7 +671,7 @@
             <input type="tel" id="phone" placeholder="+7 (XXX) XXX-XX-XX">
         </div>
         <div class="auth-button-group">
-            <button class="btn btn-login" onclick="initGameAfterAuth()">ВХОД В СИСТЕМУ</button>
+            <button class="btn btn-login" onclick="initGameAfterAuth(event)">ВХОД В СИСТЕМУ</button>
             <button class="btn btn-reset" onclick="clearAuthForm()">ОЧИСТИТЬ</button>
         </div>
         <div class="auth-stats">
@@ -1055,5 +1055,6 @@
         initPhoneInput();
     };
 </script>
+<script src="script.js"></script>
 </body>
 </html>
