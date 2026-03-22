@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Киберзащита: Дино против Сервера</title>
+    <style>
+        :root {
+            --neon-blue: #00d2ff;
+            --neon-red: #ff0055;
+            --glass: rgba(10, 25, 41, 0.85);
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background: #050a0f;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            color: #e0f2fe;
+            margin: 0;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .main-wrapper {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: url('Gemini_Generated_Image_68976n68976n6897.png') no-repeat center center;
+            background-size: cover;
+            overflow: hidden;
+        }
+
+        .background-characters {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Сдвигаем динозавра к левому краю */
+        .bg-dino {
+            position: absolute;
+            bottom: 5%;
+            left: 0;
+            width: 32%;
+            max-width: 380px;
+            min-width: 220px;
+            margin-bottom: 15px;
+            margin-right: 0;
+            opacity: 0.95;
+            filter: brightness(1.2) contrast(1.3) drop-shadow(0 0 20px rgba(0, 13, 255, 0.8));
+            transition: filter 0.2s ease;
+            animation: floatDino 3s ease-in-out infinite;
+            will-change: transform;
+            pointer-events: none;
+        }
+
+        /* Сдвигаем врага к правому краю */
+        .bg-enemy {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 48%;
+            max-width: 780px;
+            min-width: 320px;
+            margin-bottom: 20px;
+            margin-right: 0;
+            opacity: 0.96;
+            filter: brightness(1.25) contrast(1.4) drop-shadow(0 0 25px rgba(255, 0, 85, 0.9));
+            transition: filter 0.2s ease;
+            will-change: transform;
+            pointer-events: none;
+        }
+
+        @keyframes floatDino {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes shakeAnim {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(0, 0) rotate(0); }
+        }
+
+        .shake {
+            animation: shakeAnim 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        }
+
+        .auth-overlay {
+            position: absolute;
+            z-index: 100;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, rgba(10, 25, 41, 0.95) 0%, rgba(15, 35, 55, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            padding: 50px;
+            border-radius: 20px;
+            border: 2px solid var(--neon-blue);
+            text-align: center;
+            box-shadow: 0 0 80px rgba(0, 210, 255, 0.4), inset 0 0 40px rgba(0, 210, 255, 0.1);
+            min-width: 400px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .auth-overlay h1 {
+            margin: 0 0 10px 0;
+            font-size: 32px;
+            background: linear-gradient(45deg, var(--neon-blue), #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(0, 210, 255, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .auth-overlay>p {
+            color: #aaa;
+            font-size: 14px;
+            margin: 0 0 30px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .auth-form-group {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .auth-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: var(--neon-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .auth-overlay input {
+            display: block;
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--neon-blue);
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            outline: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 0 10px rgba(0, 210, 255, 0.1);
+        }
+
+        .auth-overlay input:focus {
+            background: rgba(0, 20, 40, 0.8);
+            box-shadow: inset 0 0 10px rgba(0, 210, 255, 0.2), 0 0 20px rgba(0, 210, 255, 0.3);
+            border-color: var(--neon-blue);
+        }
+
+        .auth-overlay input::placeholder {
+            color: #666;
+        }
+
+        .auth-button-group {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .auth-button-group .btn {
+            flex: 1;
+            padding: 14px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .auth-button-group .btn-login {
+            background: linear-gradient(135deg, var(--neon-blue), #00d2ff);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
+        }
+
+        .auth-button-group .btn-login:hover {
+            box-shadow: 0 0 40px rgba(0, 210, 255, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .auth-button-group .btn-reset {
+            background: rgba(255, 0, 85, 0.2);
+            color: var(--neon-red);
+            border: 1px solid var(--neon-red);
+        }
+
+        .auth-button-group .btn-reset:hover {
+            background: rgba(255, 0, 85, 0.3);
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .auth-stats {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 210, 255, 0.2);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            font-size: 12px;
+        }
+
+        .auth-stat {
+            text-align: center;
+        }
+
+        .auth-stat-value {
+            font-size: 18px;
+            color: var(--neon-blue);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .auth-stat-label {
+            color: #666;
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+
+        .game-ui {
+            display: none;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            grid-template-columns: 280px 1fr 280px;
+            grid-template-rows: 100px 1fr 250px;
+            gap: 20px;
+            padding: 20px;
+            z-index: 10;
+            position: relative;
+        }
+
+        .player-side {
+            grid-column: 1;
+            grid-row: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: center;
+            z-index: 15;
+            background: transparent;
+            pointer-events: none;
+        }
+
+        .enemy-side {
+            grid-column: 3;
+            grid-row: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: center;
+            z-index: 15;
+            background: transparent;
+            pointer-events: none;
+        }
+
+        .avatar-label {
+            margin-top: 20px;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px 18px;
+            border-radius: 40px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1rem;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+        }
+
+        .enemy-side .avatar-label {
+            border-color: rgba(255, 0, 85, 0.4);
+            color: #ff99bb;
+        }
+
+        .center-area {
+            grid-column: 2;
+            grid-row: 1 / 4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            z-index: 20;
+            pointer-events: auto;
+        }
+
+        .top-stats {
+            background: var(--glass);
+            padding: 12px 30px;
+            border-radius: 50px;
+            display: flex;
+            gap: 40px;
+            border: 1px solid var(--neon-blue);
+            backdrop-filter: blur(8px);
+            font-weight: bold;
+        }
+
+        /* УВЕЛИЧЕННЫЕ КАРТОЧКИ */
+        .hand {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            width: 200px;
+            height: 260px;
+            cursor: pointer;
+            transition: 0.25s ease;
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6));
+            background: transparent;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            pointer-events: none;
+            background: transparent;
+            border-radius: 0;
+        }
+
+        .card:hover:not(.disabled) {
+            transform: translateY(-12px) scale(1.02);
+            filter: drop-shadow(0 0 20px var(--neon-blue));
+        }
+
+        .card.disabled {
+            opacity: 0.55;
+            filter: grayscale(0.4) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6));
+            cursor: not-allowed;
+        }
+
+        .log-box {
+            width: 100%;
+            max-width: 720px;
+            height: 140px;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 18px;
+            padding: 12px 18px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border: 1px solid #2a4b6e;
+            backdrop-filter: blur(4px);
+        }
+
+        .stability-bar-container {
+            width: 100%;
+            max-width: 580px;
+            text-align: center;
+            margin: 12px 0;
+        }
+
+        canvas {
+            width: 100%;
+            height: 32px;
+            border-radius: 14px;
+            border: 2px solid #3a6b8f;
+            background: #000;
+            display: block;
+            box-shadow: 0 0 12px rgba(0, 210, 255, 0.3);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--neon-blue), #0088aa);
+            border: none;
+            color: #000;
+            padding: 10px 28px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.2s;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 16px var(--neon-blue);
+        }
+
+        /* Модальное окно — строго по центру */
+        .end-game-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .end-game-modal.show {
+            display: flex;
+        }
+
+        .end-game-content {
+            text-align: center;
+            padding: 30px 24px;
+            border-radius: 30px;
+            border: 3px solid var(--neon-blue);
+            background: rgba(8, 20, 35, 0.98);
+            backdrop-filter: blur(15px);
+            width: 90%;
+            max-width: 520px;
+            box-shadow: 0 0 50px rgba(0, 210, 255, 0.5);
+            margin: 0 auto;
+        }
+
+        .end-game-content h1 {
+            font-size: 38px;
+            margin: 0 0 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .end-game-content.victory h1 {
+            color: #00ffaa;
+            text-shadow: 0 0 30px #00ffaa;
+        }
+
+        .end-game-content.defeat h1 {
+            color: #ff3366;
+            text-shadow: 0 0 30px #ff3366;
+        }
+
+        .game-stats {
+            margin: 20px 0;
+            font-size: 18px;
+        }
+
+        .stat-line {
+            margin: 12px 0;
+            color: #e0f2fe;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .stat-label {
+            color: #bbb;
+            font-size: 16px;
+            text-align: left;
+            font-weight: normal;
+        }
+
+        .stat-value {
+            color: var(--neon-blue);
+            font-weight: bold;
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        .end-game-message {
+            font-size: 16px;
+            margin-top: 20px;
+            font-style: italic;
+            color: #ccc;
+            line-height: 1.4;
+            padding: 0 8px;
+        }
+
+        /* Адаптация под планшеты и узкие экраны */
+        @media (max-width: 1200px) {
+            .card {
+                width: 170px;
+                height: 220px;
+            }
+            .hand {
+                gap: 18px;
+            }
+            .log-box {
+                max-width: 660px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 1000px) {
+            .game-ui {
+                grid-template-columns: 200px 1fr 200px;
+                gap: 12px;
+            }
+            .card {
+                width: 150px;
+                height: 200px;
+            }
+            .hand {
+                gap: 14px;
+            }
+            .top-stats {
+                padding: 8px 20px;
+                gap: 20px;
+            }
+            .bg-dino,
+            .bg-enemy {
+                width: 38%;
+            }
+            .bg-enemy {
+                width: 55%;
+                max-width: 720px;
+                margin-bottom: 12px;
+            }
+            .end-game-content {
+                max-width: 460px;
+                padding: 24px 20px;
+            }
+            .end-game-content h1 {
+                font-size: 32px;
+            }
+            .stat-value {
+                font-size: 22px;
+            }
+            .log-box {
+                max-width: 560px;
+                height: 130px;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .hand {
+                gap: 12px;
+            }
+            .card {
+                width: 120px;
+                height: 160px;
+            }
+            .bg-dino,
+            .bg-enemy {
+                width: 45%;
+                bottom: 2%;
+            }
+            .bg-enemy {
+                width: 70%;
+                max-width: 650px;
+                margin-bottom: 8px;
+            }
+            .end-game-content {
+                max-width: 380px;
+                padding: 20px 16px;
+            }
+            .end-game-content h1 {
+                font-size: 28px;
+            }
+            .stat-line {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            .stat-label {
+                font-size: 14px;
+            }
+            .stat-value {
+                font-size: 20px;
+            }
+            .end-game-message {
+                font-size: 14px;
+            }
+            .log-box {
+                max-width: 460px;
+                font-size: 11px;
+                height: 110px;
+            }
+            .top-stats {
+                gap: 12px;
+                font-size: 14px;
+                padding: 6px 16px;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .game-ui {
+                grid-template-columns: 120px 1fr 120px;
+                gap: 6px;
+            }
+            .card {
+                width: 100px;
+                height: 135px;
+            }
+            .hand {
+                gap: 8px;
+            }
+            .avatar-label {
+                font-size: 11px;
+                padding: 4px 8px;
+            }
+            .log-box {
+                max-width: 100%;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-wrapper">
+    <div class="background-characters">
+        <img src="Дракон 2.png" class="bg-dino" id="dinoImage" alt="Синий Динозавр" draggable="false">
+        <img src="Враг.png" class="bg-enemy" id="enemyImage" alt="Хакер-Сервер" draggable="false">
+    </div>
+
+    <div id="authPanel" class="auth-overlay">
+        <h1>⚔️ CYBER DEFENSE ⚔️</h1>
+        <p>Система защиты от кибератак</p>
+        <div class="auth-form-group">
+            <label for="firstName">Имя агента</label>
+            <input type="text" id="firstName" placeholder="Введите ваше имя">
+        </div>
+        <div class="auth-form-group">
+            <label for="lastName">Фамилия</label>
+            <input type="text" id="lastName" placeholder="Введите вашу фамилию">
+        </div>
+        <div class="auth-form-group">
+            <label for="phone">Номер телефона</label>
+            <input type="tel" id="phone" placeholder="+7 (XXX) XXX-XX-XX">
+        </div>
+        <div class="auth-button-group">
+            <button class="btn btn-login" onclick="initGameAfterAuth()">ВХОД В СИСТЕМУ</button>
+            <button class="btn btn-reset" onclick="clearAuthForm()">ОЧИСТИТЬ</button>
+        </div>
+        <div class="auth-stats">
+            <div class="auth-stat">
+                <div class="auth-stat-value">7</div>
+                <div class="auth-stat-label">Раундов</div>
+            </div>
+            <div class="auth-stat">
+                <div class="auth-stat-value">∞</div>
+                <div class="auth-stat-label">Очков</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="gameScreen" class="game-ui">
+        <div class="player-side">
+            <div class="avatar-label" id="playerNameLabel">FireWall</div>
+        </div>
+        <div class="center-area">
+            <div class="top-stats">
+                <div>РАУНД: <span id="roundCount" style="color:var(--neon-blue);">1</span>/7</div>
+                <div>ОЧКИ: <span id="scoreValue" style="color:var(--neon-blue);">0</span></div>
+            </div>
+            <div class="stability-bar-container">
+                <div style="margin-bottom:5px;">🛡️ СТАБИЛЬНОСТЬ СЕРВЕРА: <span id="stabilityPercent">100</span>%</div>
+                <canvas id="stabilityCanvas" width="500" height="28"></canvas>
+            </div>
+            <div class="hand" id="playerHand"></div>
+            <div class="log-box" id="logMessages">
+                <div>[СИСТЕМА] Соединение установлено. Ожидание команды...</div>
+            </div>
+            <button class="btn" style="background:#2c3e50; color:#eee;" onclick="location.reload()">⟳ СБРОСИТЬ ИГРУ</button>
+        </div>
+        <div class="enemy-side">
+            <div class="avatar-label">ХАКЕР-СЕРВЕР</div>
+        </div>
+    </div>
+
+    <div id="endGameModal" class="end-game-modal">
+        <div id="endGameContent" class="end-game-content">
+            <h1 id="endGameTitle">РЕЗУЛЬТАТ</h1>
+            <div class="game-stats">
+                <div class="stat-line"><span class="stat-label">Раундов пройдено:</span><span class="stat-value" id="finalRound">7</span></div>
+                <div class="stat-line"><span class="stat-label">Стабильность осталось:</span><span class="stat-value" id="finalStability">0</span><span style="font-size:16px;">%</span></div>
+                <div class="stat-line"><span class="stat-label">Финальный счет:</span><span class="stat-value" id="finalScore">0</span></div>
+            </div>
+            <div class="end-game-message" id="endGameMessage"></div>
+            <<button class="btn" onclick="window.parent.postMessage('closeGame', '*')" style="margin-top:25px;">ВЕРНУТЬСЯ В ПАНЕЛЬ</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // КАРТЫ ЗАЩИТЫ С ПРИВЯЗКОЙ К PNG-ИЗОБРАЖЕНИЯМ
+    const DEFENSE_CARDS = [
+        { name: "Firewall", bonus: 100, type: "firewall", desc: "Урон -10 в этом раунде", image: "FireWall.png" },
+        { name: "Traffic Scrub", bonus: 300, type: "scrubbing", desc: "Блок UDP/ICMP атак", image: "TRAFFIC SCRUBBING.png" },
+        { name: "SYN Cookies", bonus: 400, type: "synCookies", desc: "Блок SYN +5% HP", image: "SYN COOKIES.png" },
+        { name: "Cloud CDN", bonus: 50, type: "heal20", desc: "+20% стабильности", image: "CDN.png" },
+        { name: "DPI Scan", bonus: 200, type: "dpi", desc: "След. атака -50%", image: "Deep PACKET.png" },
+        { name: "Mirror Server", bonus: 500, type: "backup", desc: "Шанс на спасение", image: "Backup Server.png" }
+    ];
+
+    const ATTACK_CARDS = [
+        { name: "ICMP Flood", damage: 15, type: "icmp" },
+        { name: "UDP Flood", damage: 25, type: "udp" },
+        { name: "SYN Flood", damage: 20, type: "syn" },
+        { name: "Slowloris", damage: 12, type: "slow", dotTurns: 2 },
+        { name: "DNS Amp", damage: 40, type: "dns", skipBot: true }
+    ];
+
+    let game = {
+        active: false,
+        isProcessing: false,
+        playerScore: 0,
+        stability: 100,
+        round: 1,
+        hand: [],
+        effects: { firewall: false, scrubbing: false, syn: false, dpi: false },
+        user: {}
+    };
+
+    const dinoImg = document.getElementById("dinoImage");
+    const enemyImg = document.getElementById("enemyImage");
+    const DEFAULT_DINO = "Дракон 2.png";
+    const ATTACK_DINO = "Дракон атака.png";
+    const DEFAULT_ENEMY = "Враг.png";
+    const ATTACK_ENEMY = "Враг атака.png";
+
+    // Вспомогательная функция для получения случайной карты, которой нет в руке
+    function getRandomUniqueCard(currentHand, cardPool = DEFENSE_CARDS) {
+        // Создаём список карт, которых ещё нет в руке (сравниваем по имени или по объекту)
+        const available = cardPool.filter(card => !currentHand.some(handCard => handCard.name === card.name));
+        if (available.length === 0) return null; // все карты уже в руке (маловероятно, но на всякий случай)
+        const randomIndex = Math.floor(Math.random() * available.length);
+        return { ...available[randomIndex] }; // копируем, чтобы избежать случайных ссылок
+    }
+
+    function animateDinoHit() {
+        return new Promise((resolve) => {
+            if (!dinoImg) return resolve();
+            dinoImg.src = ATTACK_DINO;
+            dinoImg.classList.add("shake");
+            setTimeout(() => {
+                dinoImg.classList.remove("shake");
+                dinoImg.src = DEFAULT_DINO;
+                resolve();
+            }, 420);
+        });
+    }
+
+    function animateEnemyHit() {
+        return new Promise((resolve) => {
+            if (!enemyImg) return resolve();
+            enemyImg.src = ATTACK_ENEMY;
+            enemyImg.classList.add("shake");
+            setTimeout(() => {
+                enemyImg.classList.remove("shake");
+                enemyImg.src = DEFAULT_ENEMY;
+                resolve();
+            }, 420);
+        });
+    }
+
+    function addLog(msg, color = "#d0f0ff") {
+        const log = document.getElementById("logMessages");
+        if (!log) return;
+        log.innerHTML += `<div style="color:${color}; margin-bottom:5px;">> ${msg}</div>`;
+        log.scrollTop = log.scrollHeight;
+    }
+
+    function updateUI() {
+        document.getElementById("scoreValue").innerText = game.playerScore;
+        document.getElementById("roundCount").innerText = game.round;
+        document.getElementById("stabilityPercent").innerText = Math.max(0, game.stability);
+        drawStability();
+        renderHand();
+    }
+
+    function drawStability() {
+        const canvas = document.getElementById("stabilityCanvas");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        const percent = Math.max(0, Math.min(100, game.stability));
+        const w = (percent / 100) * canvas.width;
+        let color = "#ff0055";
+        if (percent >= 80) color = "#00ffaa";
+        else if (percent >= 60) color = "#00d2ff";
+        else if (percent >= 40) color = "#ffff44";
+        else if (percent >= 20) color = "#ffaa33";
+        ctx.fillStyle = color;
+        ctx.fillRect(0, 0, w, canvas.height);
+        ctx.shadowBlur = 8;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(1, 1, canvas.width - 2, canvas.height - 2);
+        ctx.shadowBlur = 0;
+    }
+
+    function renderHand() {
+        const container = document.getElementById("playerHand");
+        if (!container) return;
+        container.innerHTML = "";
+        if (!game.hand.length) return;
+        game.hand.forEach((card, idx) => {
+            const div = document.createElement("div");
+            div.className = `card ${game.isProcessing ? 'disabled' : ''}`;
+            const img = document.createElement("img");
+            img.src = card.image;
+            img.alt = card.name;
+            img.loading = "lazy";
+            div.appendChild(img);
+            if (!game.isProcessing) div.onclick = () => playCard(idx);
+            container.appendChild(div);
+        });
+    }
+
+    async function playCard(idx) {
+        if (!game.active || game.isProcessing) return;
+        game.isProcessing = true;
+        const card = game.hand[idx];
+        game.hand.splice(idx, 1);
+        game.playerScore += card.bonus;
+        addLog(`🔰 Активирована защита: ${card.name} (+${card.bonus} pts)`, "#6effb0");
+        if (card.type === "firewall") game.effects.firewall = true;
+        if (card.type === "scrubbing") game.effects.scrubbing = true;
+        if (card.type === "synCookies") game.effects.syn = true;
+        if (card.type === "heal20") {
+            game.stability = Math.min(100, game.stability + 20);
+            addLog(`🔄 Восстановление +20% стабильности!`, "#88ffaa");
+        }
+        if (card.type === "dpi") game.effects.dpi = true;
+        updateUI();
+        await new Promise(r => setTimeout(r, 650));
+        await botTurn();
+    }
+
+    async function botTurn() {
+        const attack = ATTACK_CARDS[Math.floor(Math.random() * ATTACK_CARDS.length)];
+        addLog(`⚡ АТАКА СЕРВЕРА: ${attack.name} (базовый урон ${attack.damage})`, "#ff8888");
+
+        let dmg = attack.damage;
+        const wasDpiActive = game.effects.dpi;
+
+        if (game.effects.scrubbing && (attack.type === 'icmp' || attack.type === 'udp')) {
+            addLog(`🌀 Traffic Scrubbing: атака ${attack.name} полностью нейтрализована!`, "#aaffaa");
+            dmg = 0;
+        } else if (game.effects.syn && attack.type === 'syn') {
+            addLog(`🍪 SYN Cookies: флуд отражён, урон = 0`, "#aaffaa");
+            dmg = 0;
+        } else {
+            if (game.effects.dpi) {
+                dmg = Math.floor(dmg * 0.5);
+                addLog(`📡 DPI-сканер снизил мощь атаки на 50%`, "#ffcc88");
+            }
+            if (game.effects.firewall) {
+                dmg = Math.max(0, dmg - 10);
+                addLog(`🔥 Firewall поглотил 10 единиц урона`, "#ffaa66");
+            }
+        }
+        dmg = Math.max(0, Math.floor(dmg));
+
+        if (wasDpiActive) {
+            await Promise.all([animateDinoHit(), animateEnemyHit()]);
+        } else {
+            if (dmg === 0) {
+                await animateEnemyHit();
+            } else {
+                await animateDinoHit();
+            }
+        }
+
+        if (dmg > 0) {
+            game.stability -= dmg;
+            addLog(`💥 Нанесён урон: -${dmg}% стабильности`, "#ff8888");
+        } else {
+            addLog(`✨ Атака полностью блокирована! Враг дезориентирован.`, "#aaffaa");
+        }
+
+        game.effects = { firewall: false, scrubbing: false, syn: false, dpi: false };
+
+        if (game.stability <= 0) {
+            game.stability = 0;
+            updateUI();
+            endGame(false);
+            return;
+        }
+        if (game.round >= 7) {
+            endGame(true);
+            return;
+        }
+
+        game.round++;
+        if (game.hand.length < 3) {
+            // Добавляем карту, которой ещё нет в руке
+            const newCard = getRandomUniqueCard(game.hand, DEFENSE_CARDS);
+            if (newCard) {
+                game.hand.push(newCard);
+                addLog(`📦 Дополнительная карта защиты добавлена в руку: ${newCard.name}`, "#88aaff");
+            } else {
+                addLog(`⚠️ Все карты уже в руке, новая карта не добавлена.`, "#ffaa88");
+            }
+        }
+        game.isProcessing = false;
+        addLog(`🔷 РАУНД ${game.round} | Ожидание вашего хода...`, "#88ccff");
+        updateUI();
+    }
+
+    function endGame(win) {
+        game.active = false;
+        game.isProcessing = true;
+        if (win) {
+            game.playerScore += 1000;
+            addLog("🏆 ВИРТУАЛЬНАЯ ПОБЕДА! Сервер защищён. +1000 бонусных очков.", "#aaffaa");
+        } else {
+            addLog("💀 КРИТИЧЕСКИЙ СБОЙ. Сервер взломан. Игра завершена.", "#ff7777");
+        }
+        updateUI();
+        setTimeout(() => showEndGameModal(win), 800);
+    }
+
+    function showEndGameModal(win) {
+        const modal = document.getElementById("endGameModal");
+        const content = document.getElementById("endGameContent");
+        const title = document.getElementById("endGameTitle");
+        const message = document.getElementById("endGameMessage");
+        content.className = "end-game-content " + (win ? "victory" : "defeat");
+        title.textContent = win ? "🏆 ПОБЕДА 🏆" : "💀 ПОРАЖЕНИЕ 💀";
+        document.getElementById("finalRound").textContent = game.round;
+        document.getElementById("finalStability").textContent = Math.max(0, game.stability);
+        document.getElementById("finalScore").textContent = game.playerScore;
+        message.textContent = win ? `Поздравляем, агент ${game.user.name || "киберзащитник"}! Вы отразили все атаки за ${game.round} раундов и сохранили ${game.stability}% стабильности.` : `Агент ${game.user.name || "неизвестный"}, система пала... Вы выдержали ${game.round} раундов. Перезапустите защиту.`;
+        modal.classList.add("show");
+    }
+
+    function initGameAfterAuth() {
+        const firstName = document.getElementById("firstName").value.trim();
+        const lastName = document.getElementById("lastName").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+
+        if (!firstName || !phone) {
+            alert("⚠️ Заполните имя и контакт для входа в систему!");
+            return;
+        }
+
+        const fullName = lastName ? `${firstName} ${lastName}` : firstName;
+        game.user = { name: fullName, firstName, lastName, phone };
+
+        const playerLabel = document.getElementById("playerNameLabel");
+        if (playerLabel) {
+            playerLabel.textContent = fullName;
+        }
+
+        document.getElementById("authPanel").style.display = "none";
+        document.getElementById("gameScreen").style.display = "grid";
+
+        game.active = true;
+        game.isProcessing = false;
+        game.playerScore = 0;
+        game.stability = 100;
+        game.round = 1;
+        game.effects = { firewall: false, scrubbing: false, syn: false, dpi: false };
+        
+        // Начальная рука из трёх уникальных карт (заведомо разные, но на всякий случай используем функцию, чтобы убедиться)
+        const initialCards = [DEFENSE_CARDS[0], DEFENSE_CARDS[1], DEFENSE_CARDS[3]];
+        game.hand = [];
+        for (let card of initialCards) {
+            if (!game.hand.some(c => c.name === card.name)) {
+                game.hand.push({ ...card });
+            }
+        }
+        // Если вдруг дубликат (хотя такого быть не должно), добиваем уникальностью
+        while (game.hand.length < 3) {
+            const newCard = getRandomUniqueCard(game.hand, DEFENSE_CARDS);
+            if (newCard) game.hand.push(newCard);
+            else break;
+        }
+
+        if (dinoImg) dinoImg.src = DEFAULT_DINO;
+        if (enemyImg) enemyImg.src = DEFAULT_ENEMY;
+
+        updateUI();
+        addLog(`🔐 Добро пожаловать, ${fullName}! Защитите ядро сервера.`, "#aaf0ff");
+    }
+
+    function clearAuthForm() {
+        document.getElementById("firstName").value = "";
+        document.getElementById("lastName").value = "";
+        document.getElementById("phone").value = "";
+        document.getElementById("firstName").focus();
+    }
+
+    function initPhoneInput() {
+        const phoneInput = document.getElementById("phone");
+        if (!phoneInput) return;
+        phoneInput.addEventListener("input", (e) => {
+            let value = e.target.value.replace(/\D/g, "");
+            if (value.length > 11) value = value.slice(0, 11);
+            if (value.length > 0 && value[0] === "7") {
+                value = "7" + value.slice(1);
+                e.target.value = "+" + value;
+            } else if (value.length > 0) {
+                e.target.value = value;
+            } else {
+                e.target.value = "";
+            }
+        });
+    }
+
+    window.onload = () => {
+        const canvas = document.getElementById("stabilityCanvas");
+        if (canvas) {
+            canvas.width = canvas.clientWidth;
+            canvas.height = 28;
+            drawStability();
+        }
+        initPhoneInput();
+    };
+</script>
+</body>
+</html>
